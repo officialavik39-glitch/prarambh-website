@@ -8,6 +8,29 @@
     { code:"07", codename:"The Negotiator", name:"Public Relation", icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 12h.01M12 12h.01M16 12h.01"/><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' },
   ];
 
+  const bgEffects = document.querySelector('.bg-effects');
+  if (bgEffects) {
+    let pointerX = 0;
+    let pointerY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    window.addEventListener('pointermove', (event) => {
+      pointerX = ((event.clientX / window.innerWidth) - 0.5) * 18;
+      pointerY = ((event.clientY / window.innerHeight) - 0.5) * 18;
+    });
+
+    const updateParallax = () => {
+      currentX += (pointerX - currentX) * 0.06;
+      currentY += (pointerY - currentY) * 0.06;
+      bgEffects.style.setProperty('--mx', `${currentX}px`);
+      bgEffects.style.setProperty('--my', `${currentY}px`);
+      requestAnimationFrame(updateParallax);
+    };
+
+    updateParallax();
+  }
+
   const burgerBtn = document.getElementById('burgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
   burgerBtn.addEventListener('click', () => {
