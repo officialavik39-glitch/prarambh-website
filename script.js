@@ -25,8 +25,9 @@
   const domainPicker = document.getElementById('domainPicker');
   const coordCards = document.getElementById('coordCards');
   const domainInput = document.getElementById('domain');
+  const coordinatorNames = ['Isha Prasad', 'Ayush Noel Beck', 'Yazhini'];
 
-  DOMAINS.forEach(d => {
+  DOMAINS.forEach((d, index) => {
     // vault board room
     if(roomsGrid) {
       const room = document.createElement('div');
@@ -54,14 +55,13 @@
       domainPicker.appendChild(chip);
     }
 
-    // coordinator card
-    if(coordCards) {
+    // coordinator card (only first 3 domains)
+    if(coordCards && index < 3) {
       const card = document.createElement('div');
       card.className = 'coord-card';
       card.innerHTML = `
-        <span class="tag">${d.name} · "${d.codename}"</span>
-        <div class="name">[ Coordinator Name ]</div>
-        <div class="phone">📞 <a href="tel:+91XXXXXXXXXX">+91 XXXXX XXXXX</a></div>
+        <div class="name">${coordinatorNames[index]}</div>
+        <div class="email">📧 <a href="mailto:coordinator@example.com">coordinator@example.com</a></div>
       `;
       coordCards.appendChild(card);
     }
