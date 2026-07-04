@@ -400,6 +400,23 @@
     font-size:15.5px;
   }
 
+  .form-note{
+    margin-top:20px;
+    display:inline-block;
+    padding:10px 14px;
+    border:1px solid rgba(200,30,44,0.25);
+    background:rgba(200,30,44,0.08);
+    color:var(--ink);
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.04em;
+  }
+
+  .form-note strong{
+    color:var(--jumpsuit-dark);
+  }
+
   /* ---------- about ---------- */
   .about{
     background:linear-gradient(180deg, var(--void) 0%, var(--void-2) 100%);

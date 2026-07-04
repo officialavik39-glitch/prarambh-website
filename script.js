@@ -48,6 +48,8 @@
   const domainPicker = document.getElementById('domainPicker');
   const coordCards = document.getElementById('coordCards');
   const domainInput = document.getElementById('domain');
+  const selectedDomainNote = document.getElementById('domainSelectionNote');
+  const selectedDomainLabel = document.getElementById('selectedDomainLabel');
   const coordinatorNames = ['Isha Prasad', 'Ayush Noel Beck', 'Yazhini'];
 
   DOMAINS.forEach((d, index) => {
@@ -90,111 +92,159 @@
     }
   });
 
+  function updateSelectionNote(name){
+    if (selectedDomainNote && selectedDomainLabel) {
+      selectedDomainLabel.textContent = name;
+      selectedDomainNote.style.display = 'inline-block';
+    }
+  }
+
+  function scrollToRegister(){
+    const registerSection = document.getElementById('register');
+    if (!registerSection) return;
+
+    const navHeight = document.querySelector('nav')?.offsetHeight || 80;
+    const targetY = registerSection.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+
+    window.scrollTo({ top: targetY, behavior:'smooth' });
+    if (window.location.hash !== '#register') {
+      history.replaceState(null, '', '#register');
+    }
+
+    setTimeout(() => {
+      const iframe = registerSection.querySelector('iframe');
+      if (iframe) {
+        iframe.scrollIntoView({ behavior:'smooth', block:'start' });
+      }
+    }, 400);
+  }
+
   function selectDomain(name){
-    domainInput.value = name;
+    if (!name) return;
+
+    if (domainInput) {
+      domainInput.value = name;
+    }
+
     document.querySelectorAll('.room').forEach(r => r.classList.toggle('active', r.dataset.name === name));
     document.querySelectorAll('.domain-chip').forEach(c => c.classList.toggle('selected', c.dataset.name === name));
-    document.getElementById('register').scrollIntoView({behavior:'smooth', block:'start'});
-    document.querySelector('.field:has(#domain)')?.classList.remove('invalid');
+    updateSelectionNote(name);
+    scrollToRegister();
   }
 
   // ---------- form validation & submit ----------
   const form = document.getElementById('regForm');
   const confirmPanel = document.getElementById('confirmPanel');
 
-  function setInvalid(fieldEl, invalid){
-    fieldEl.classList.toggle('invalid', invalid);
+  if (form) {
+    function setInvalid(fieldEl, invalid) {
+      fieldEl.classList.toggle('invalid', invalid);
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      let valid = true;
+
+      const nameField = document.getElementById('fname');
+      const regField = document.getElementById('regno');
+      const phoneField = document.getElementById('phone');
+      const emailField = document.getElementById('email');
+
+      if (!nameField.value.trim()) { setInvalid(nameField.closest('.field'), true); valid = false; }
+      else { setInvalid(nameField.closest('.field'), false); }
+
+      if (!regField.value.trim()) { setInvalid(regField.closest('.field'), true); valid = false; }
+      else { setInvalid(regField.closest('.field'), false); }
+
+      const phoneOk = /^[6-9]\d{9}$/.test(phoneField.value.trim());
+      setInvalid(phoneField.closest('.field'), !phoneOk);
+      if (!phoneOk) valid = false;
+
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value.trim());
+      setInvalid(emailField.closest('.field'), !emailOk);
+      if (!emailOk) valid = false;
+
+      const domainOk = !!domainInput.value;
+      const domainError = document.getElementById('domainError');
+      if (domainError) {
+        domainError.style.display = domainOk ? 'none' : 'block';
+      }
+      if (!domainOk) valid = false;
+
+      if (!valid) return;
+
+      const agentId = 'PRB-' + Math.random().toString(36).slice(2, 6).toUpperCase() + '-' + Math.floor(100 + Math.random() * 900);
+
+      const entry = {
+        id: agentId,
+        name: nameField.value.trim(),
+        regno: regField.value.trim(),
+        email: emailField.value.trim(),
+        phone: phoneField.value.trim(),
+        domain: domainInput.value,
+        time: new Date().toLocaleString()
+      };
+
+      try {
+        const existing = JSON.parse(localStorage.getItem('prarambh_registrations') || '[]');
+        existing.push(entry);
+        localStorage.setItem('prarambh_registrations', JSON.stringify(existing));
+      } catch (err) {
+        console.warn('Could not save locally', err);
+      }
+
+      document.getElementById('agentId').textContent = 'AGENT ID: ' + agentId;
+      const waText = encodeURIComponent(
+        `PRARAMBH Registration\nName: ${entry.name}\nReg No: ${entry.regno}\nDomain: ${entry.domain}\nPhone: ${entry.phone}\nAgent ID: ${entry.id}`
+      );
+      document.getElementById('waLink').href = `https://wa.me/91XXXXXXXXXX?text=${waText}`;
+      confirmPanel.classList.add('show');
+      confirmPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      document.getElementById('downloadBtn').onclick = () => {
+        const blob = new Blob([
+          `PRARAMBH — Registration Confirmation\n\nAgent ID: ${entry.id}\nName: ${entry.name}\nRegistration No: ${entry.regno}\nEmail: ${entry.email}\nPhone: ${entry.phone}\nDomain: ${entry.domain}\nSubmitted: ${entry.time}\n`
+        ], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `PRARAMBH_${entry.id}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+
+      form.reset();
+      if (domainInput) {
+        domainInput.value = '';
+      }
+      document.querySelectorAll('.room.active').forEach(r => r.classList.remove('active'));
+      document.querySelectorAll('.domain-chip.selected').forEach(c => c.classList.remove('selected'));
+    });
   }
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    let valid = true;
-
-    const nameField = document.getElementById('fname');
-    const regField = document.getElementById('regno');
-    const phoneField = document.getElementById('phone');
-    const emailField = document.getElementById('email');
-
-    if(!nameField.value.trim()){ setInvalid(nameField.closest('.field'), true); valid = false; }
-    else setInvalid(nameField.closest('.field'), false);
-
-    if(!regField.value.trim()){ setInvalid(regField.closest('.field'), true); valid = false; }
-    else setInvalid(regField.closest('.field'), false);
-
-    const phoneOk = /^[6-9]\d{9}$/.test(phoneField.value.trim());
-    setInvalid(phoneField.closest('.field'), !phoneOk);
-    if(!phoneOk) valid = false;
-
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value.trim());
-    setInvalid(emailField.closest('.field'), !emailOk);
-    if(!emailOk) valid = false;
-
-    const domainOk = !!domainInput.value;
-    document.getElementById('domainError').style.display = domainOk ? 'none' : 'block';
-    if(!domainOk) valid = false;
-
-    if(!valid) return;
-
-    const agentId = 'PRB-' + Math.random().toString(36).slice(2,6).toUpperCase() + '-' + Math.floor(100+Math.random()*900);
-
-    const entry = {
-      id: agentId,
-      name: nameField.value.trim(),
-      regno: regField.value.trim(),
-      email: emailField.value.trim(),
-      phone: phoneField.value.trim(),
-      domain: domainInput.value,
-      time: new Date().toLocaleString()
-    };
-
-    try{
-      const existing = JSON.parse(localStorage.getItem('prarambh_registrations') || '[]');
-      existing.push(entry);
-      localStorage.setItem('prarambh_registrations', JSON.stringify(existing));
-    }catch(err){ console.warn('Could not save locally', err); }
-
-    document.getElementById('agentId').textContent = 'AGENT ID: ' + agentId;
-    const waText = encodeURIComponent(
-      `PRARAMBH Registration\nName: ${entry.name}\nReg No: ${entry.regno}\nDomain: ${entry.domain}\nPhone: ${entry.phone}\nAgent ID: ${entry.id}`
-    );
-    document.getElementById('waLink').href = `https://wa.me/91XXXXXXXXXX?text=${waText}`;
-    confirmPanel.classList.add('show');
-    confirmPanel.scrollIntoView({behavior:'smooth', block:'nearest'});
-
-    document.getElementById('downloadBtn').onclick = () => {
-      const blob = new Blob([
-        `PRARAMBH — Registration Confirmation\n\nAgent ID: ${entry.id}\nName: ${entry.name}\nRegistration No: ${entry.regno}\nEmail: ${entry.email}\nPhone: ${entry.phone}\nDomain: ${entry.domain}\nSubmitted: ${entry.time}\n`
-      ], {type:'text/plain'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = `PRARAMBH_${entry.id}.txt`;
-      a.click();
-      URL.revokeObjectURL(url);
-    };
-
-    form.reset();
-    domainInput.value = '';
-    document.querySelectorAll('.room.active').forEach(r => r.classList.remove('active'));
-    document.querySelectorAll('.domain-chip.selected').forEach(c => c.classList.remove('selected'));
-  });
 
   // ---------- lightweight admin viewer ----------
   const adminModal = document.getElementById('adminModal');
-  document.getElementById('adminLink').addEventListener('click', (e) => {
-    e.preventDefault();
-    const pass = prompt('Organizer passcode:');
-    if(pass !== 'praramabh2026'){ if(pass !== null) alert('Incorrect passcode.'); return; }
-    const data = JSON.parse(localStorage.getItem('prarambh_registrations') || '[]');
-    const content = document.getElementById('adminContent');
-    if(!data.length){
-      content.innerHTML = '<p>No registrations recorded on this device/browser yet.</p>';
-    } else {
-      let rows = data.map(d => `<tr><td>${d.id}</td><td>${d.name}</td><td>${d.regno}</td><td>${d.email}</td><td>${d.phone}</td><td>${d.domain}</td><td>${d.time}</td></tr>`).join('');
-      content.innerHTML = `
-        <p style="margin-bottom:12px;font-size:12.5px;color:#555;">Showing entries saved on this browser only. For live, multi-device collection, connect this form to a shared backend (Google Sheets, Forms, or a database).</p>
-        <table><thead><tr><th>Agent ID</th><th>Name</th><th>Reg No</th><th>Email</th><th>Phone</th><th>Domain</th><th>Time</th></tr></thead><tbody>${rows}</tbody></table>
-      `;
-    }
-    adminModal.classList.add('show');
-  });
-  document.getElementById('adminCloseBtn').addEventListener('click', () => adminModal.classList.remove('show'));
+  const adminLink = document.getElementById('adminLink');
+  if (adminLink) {
+    adminLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const pass = prompt('Organizer passcode:');
+      if (pass !== 'praramabh2026') { if (pass !== null) alert('Incorrect passcode.'); return; }
+      const data = JSON.parse(localStorage.getItem('prarambh_registrations') || '[]');
+      const content = document.getElementById('adminContent');
+      if (!data.length) {
+        content.innerHTML = '<p>No registrations recorded on this device/browser yet.</p>';
+      } else {
+        let rows = data.map(d => `<tr><td>${d.id}</td><td>${d.name}</td><td>${d.regno}</td><td>${d.email}</td><td>${d.phone}</td><td>${d.domain}</td><td>${d.time}</td></tr>`).join('');
+        content.innerHTML = `
+          <p style="margin-bottom:12px;font-size:12.5px;color:#555;">Showing entries saved on this browser only. For live, multi-device collection, connect this form to a shared backend (Google Sheets, Forms, or a database).</p>
+          <table><thead><tr><th>Agent ID</th><th>Name</th><th>Reg No</th><th>Email</th><th>Phone</th><th>Domain</th><th>Time</th></tr></thead><tbody>${rows}</tbody></table>
+        `;
+      }
+      adminModal.classList.add('show');
+    });
+  }
+
+  const adminCloseBtn = document.getElementById('adminCloseBtn');
+  if (adminCloseBtn && adminModal) {
+    adminCloseBtn.addEventListener('click', () => adminModal.classList.remove('show'));
+  }
