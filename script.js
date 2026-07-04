@@ -28,37 +28,43 @@
 
   DOMAINS.forEach(d => {
     // vault board room
-    const room = document.createElement('div');
-    room.className = 'room';
-    room.tabIndex = 0;
-    room.dataset.name = d.name;
-    room.innerHTML = `
-      <div class="icon">${d.icon}</div>
-      <div class="file-no">FILE NO. ${d.code}</div>
-      <div class="codename">${d.codename}</div>
-      <div class="domain-name">${d.name}</div>
-    `;
-    room.addEventListener('click', () => selectDomain(d.name));
-    room.addEventListener('keypress', (e) => { if(e.key === 'Enter') selectDomain(d.name); });
-    roomsGrid.appendChild(room);
+    if(roomsGrid) {
+      const room = document.createElement('div');
+      room.className = 'room';
+      room.tabIndex = 0;
+      room.dataset.name = d.name;
+      room.innerHTML = `
+        <div class="icon">${d.icon}</div>
+        <div class="file-no">FILE NO. ${d.code}</div>
+        <div class="codename">${d.codename}</div>
+        <div class="domain-name">${d.name}</div>
+      `;
+      room.addEventListener('click', () => selectDomain(d.name));
+      room.addEventListener('keypress', (e) => { if(e.key === 'Enter') selectDomain(d.name); });
+      roomsGrid.appendChild(room);
+    }
 
     // registration chip
-    const chip = document.createElement('div');
-    chip.className = 'domain-chip';
-    chip.textContent = d.name;
-    chip.dataset.name = d.name;
-    chip.addEventListener('click', () => selectDomain(d.name));
-    domainPicker.appendChild(chip);
+    if(domainPicker) {
+      const chip = document.createElement('div');
+      chip.className = 'domain-chip';
+      chip.textContent = d.name;
+      chip.dataset.name = d.name;
+      chip.addEventListener('click', () => selectDomain(d.name));
+      domainPicker.appendChild(chip);
+    }
 
     // coordinator card
-    const card = document.createElement('div');
-    card.className = 'coord-card';
-    card.innerHTML = `
-      <span class="tag">${d.name} · "${d.codename}"</span>
-      <div class="name">[ Coordinator Name ]</div>
-      <div class="phone">📞 <a href="tel:+91XXXXXXXXXX">+91 XXXXX XXXXX</a></div>
-    `;
-    coordCards.appendChild(card);
+    if(coordCards) {
+      const card = document.createElement('div');
+      card.className = 'coord-card';
+      card.innerHTML = `
+        <span class="tag">${d.name} · "${d.codename}"</span>
+        <div class="name">[ Coordinator Name ]</div>
+        <div class="phone">📞 <a href="tel:+91XXXXXXXXXX">+91 XXXXX XXXXX</a></div>
+      `;
+      coordCards.appendChild(card);
+    }
   });
 
   function selectDomain(name){
