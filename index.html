@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="styles.css">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRARAMBH — CUCA | Department of Commerce</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="ticker" aria-hidden="true">
+  <span class="ticker-track">
+    CHRIST UNIVERSITY COMMERCE ASSOSCIATION — DEPARTMENT OF COMMERCE — OPERATION PRARAMBH — REGISTER NOW
+  </span>
+</div>
+
+<nav>
+  <div class="nav-inner wrap" style="padding-left:0;padding-right:0;">
+    <div class="brand">
+      <img src="assets/cuca-logo.jpeg" alt="CUCA logo">
+      PRARAMBH
+    </div>
+    <div class="nav-links">
+      <a href="#about">Briefing</a>
+      <a href="#vault">Domains</a>
+      <a href="#coordinators">Crew</a>
+    </div>
+    <a href="#register" class="nav-cta">Register</a>
+    <button class="burger" id="burgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about">Briefing</a>
+    <a href="#vault">Domains</a>
+    <a href="#coordinators">Crew</a>
+    <a href="#register" class="nav-cta-mobile">Register</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap" style="position:relative;">
+    <span class="stamp">CLASSIFIED &nbsp;·&nbsp; EYES ONLY &nbsp;·&nbsp; COMMERCE DIVISION</span>
+    <h1>PRARAMBH<span><table>the ultimate battle</table></span></h1>
+    <p class="hero-sub">
+      The vault has seven rooms. Each one guards a different currency of skill — strategy, capital, pitch, wit, persuasion, people, and public trust.
+      Assemble your crew and break in.
+    </p>
+    <p class="hero-org">Presented by <strong>CUCA</strong> — Christ University Commerce Association &nbsp;|&nbsp; Department of Commerce &nbsp;|&nbsp; School of Commerce, Finance and Accountancy</p>
+    <div class="hero-btns">
+      <a href="#register" class="btn btn-primary">Join the Heist</a>
+      <a href="#vault" class="btn btn-ghost">View the Floor Plan</a>
+    </div>
+  </div>
+</header>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="eyebrow">The Briefing</div>
+    <h2 class="section-title">Every heist needs a plan.</h2>
+    <div class="about-grid">
+      <div class="dossier">
+        <p><strong>PRARAMBH</strong> — meaning "the beginning" — is the flagship symposium of the Christ University Commerce Association (CUCA), bringing together the sharpest minds of the Department of Commerce for a single afternoon of strategy, capital, and nerve.</p>
+        <p>This year's operation is styled after the world's most famous heist: red jumpsuits, a professor's plan, and a vault worth cracking. Seven rooms. Seven skills. One shot at the gold.</p>
+        <p>Participants register individually and are assigned to one of seven domains — each a test designed by a different "cell" of the crew. Come prepared. The Bank of Spain didn't fall to luck.</p>
+      </div>
+      <div class="facts">
+        <div class="fact">
+          <div class="num">01</div>
+          <div><h4>Who's behind it</h4><p>Organised by CUCA under the Department of Commerce, School of Commerce, Finance and Accountancy.</p></div>
+        </div>
+        <div class="fact">
+          <div class="num">02</div>
+          <div><h4>Who can join</h4><p>All commerce students are eligible to enlist into any one of the seven domains below.</p></div>
+        </div>
+        <div class="fact">
+          <div class="num">03</div>
+          <div><h4>What you need</h4><p>Your name, registration number, Christ University email ID and phone number — that's the minimum clearance required.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="vault" id="vault">
+  <div class="wrap">
+    <div class="eyebrow">The Floor Plan</div>
+    <h2 class="section-title">Seven rooms. Seven domains.</h2>
+    <p class="section-desc">Click a room to mark it as your target — it'll carry straight through to your enlistment form below.</p>
+
+    <div class="blueprint-grid">
+      <div class="rooms" id="roomsGrid">
+        <!-- rooms injected by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="register" id="register">
+  <div class="wrap">
+    <div class="eyebrow">Enlist</div>
+    <h2 class="section-title">Put your name on the plan.</h2>
+    <p class="section-desc">Fill in your details truthfully — the Professor checks every file twice.</p>
+
+    <div class="form-shell">
+      <div class="gform-wrap">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScbbs9v9LaSjJuHwXNPiQHX7u8nHE57FRfgD2mitKnzHZFl_A/viewform?usp=dialog" width="100%" height="1200" frameborder="0" marginheight="0" marginwidth="0">
+          Loading…
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="coordinators" id="coordinators">
+  <div class="wrap">
+    <div class="eyebrow">The Crew</div>
+    <h2 class="section-title">Your student coordinators.</h2>
+    <p class="section-desc">Reach out to the coordinator for your domain for any questions before or during the event.</p>
+
+    <div class="coord-grid">
+      <div class="coord-lead">
+        <div>
+          <span class="tag">Overall Event Coordinator</span>
+          <div class="name">[ Coordinator Name ]</div>
+        </div>
+        <div class="phone">📞 <a href="tel:+91XXXXXXXXXX">+91 XXXXX XXXXX</a></div>
+      </div>
+      <!-- one card per domain, injected by JS -->
+      <div id="coordCards" style="display:contents;"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h3>PRARAMBH</h3>
+        <p>An initiative of the Christ University Commerce Association (CUCA), Department of Commerce, School of Commerce, Finance and Accountancy.</p>
+      </div>
+      <div class="footer-logos">
+        <div class="logo-block">
+          <img src="assets/cuca-logo.jpeg" alt="CUCA — Christ University Commerce Association logo">
+          <div>
+            <div class="lt">Organised by</div>
+            <div class="lb">CUCA</div>
+          </div>
+        </div>
+        <div class="logo-block">
+          <img src="assets/joyful-campus-logo.jpeg" alt="Joyful Campus Care logo">
+          <div>
+            <div class="lt">In association with</div>
+            <div class="lb">Joyful Campus Care</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 CUCA · Department of Commerce · Christ University, Yeshwanthpur Campus</span>
+      <a href="#" id="adminLink">Organizer access</a>
+    </div>
+  </div>
+</footer>
+
+<div id="adminModal">
+  <div class="admin-box">
+    <button class="admin-close" id="adminCloseBtn">Close</button>
+    <h3>Registered Crew Members</h3>
+    <div id="adminContent"></div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
