@@ -50,7 +50,11 @@
   const domainInput = document.getElementById('domain');
   const selectedDomainNote = document.getElementById('domainSelectionNote');
   const selectedDomainLabel = document.getElementById('selectedDomainLabel');
-  const coordinatorNames = ['Isha Prasad', 'Ayush Noel Beck', 'Yazhini'];
+  const coordinatorProfiles = [
+    { name: 'Isha Prasad', email: 'isha.prasad@bcomath.christuniversity.in' },
+    { name: 'Ayush Noel Beck', email: 'ayush.noel@bcomfih.christuniversity.in' },
+    { name: 'Yazhini', email: 'yazhini@bcomfih.christuniversity.in' }
+  ];
 
   DOMAINS.forEach((d, index) => {
     // vault board room
@@ -82,11 +86,12 @@
 
     // coordinator card (only first 3 domains)
     if(coordCards && index < 3) {
+      const profile = coordinatorProfiles[index];
       const card = document.createElement('div');
       card.className = 'coord-card';
       card.innerHTML = `
-        <div class="name">${coordinatorNames[index]}</div>
-        <div class="email">📧 <a href="mailto:coordinator@example.com">coordinator@example.com</a></div>
+        <div class="name">${profile.name}</div>
+        <div class="email">📧 <a href="mailto:${profile.email}">${profile.email}</a></div>
       `;
       coordCards.appendChild(card);
     }
